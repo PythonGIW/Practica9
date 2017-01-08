@@ -27,10 +27,15 @@ db = mongoclient['giw']
 @get('/top_countries')
 # http://localhost:8080/top_countries?n=3
 def agg1():
+<<<<<<< HEAD
 	result = db.usuarios.aggregate([
+=======
+	num = int(request.query['n'])
+	result = db.usuarios.aggregate( [
+>>>>>>> c645d9448fcb676a11bdf36acf37772aabfec579
 		{"$group": {"_id": "$pais","num": {"$sum":1}}},
  		{"$sort" : {"num":-1, "_id":-1}},
- 		{"$limit" : int(request.query['n'])}
+ 		{"$limit" : num}
 	])
     	return template('aggregationPipeline.tpl', result = result, claves= ["_id","num"], nombres = ["Pais", "Numero"], num = num)
 
