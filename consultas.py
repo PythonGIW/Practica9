@@ -53,7 +53,14 @@ def agg2():
 @get('/age_range')
 # http://localhost:8080/age_range?min=80
 def agg3():
-    pass
+    r = db.usuarios.aggregate( [
+		{"$group": {"_id": "$pais","num": {"$sum":1}, "max":{"$max":"$edad"}, "min":{"$min":"$edad"}}},
+		{"$project": {"range":{"$subtract":["$max", "$min"]}, "pais": "$_id", "max":"$max", "min":"$min"}},
+		{"$match" : {"range":{"$gte":int(request.query['min'])}}},
+		{"$sort" : {"range":-1, "_id":-1}}
+	])
+		return template('aggregationPipeline.tpl', result = r, claves= ["_id","range"], nombres = ["Pais", "Rango de Edades"])
+
     
     
 @get('/avg_lines')
