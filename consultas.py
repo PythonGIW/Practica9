@@ -58,12 +58,17 @@ def agg3():
 			{"$match" : {"range":{"$gte":int(request.query['min'])}}},
 			{"$sort" : {"range":-1, "_id":-1}}
 		])
-    return template('aggregationPipeline.tpl', result = r, claves= ["_id","range"], nombres = ["Pais", "Numero"], num = 10)    
+    return template('aggregationPipeline.tpl', result = r, claves= ["_id","range"], nombres = ["Pais", "Numero"], num = 10)
     
 @get('/avg_lines')
 # http://localhost:8080/avg_lines
 def agg4():
-    pass
+	r = db.usuarios.aggregate([
+		{"$group": {"_id": "$pais","num": {"$sum":1}, "avg":{"$avg":"$lineas"}}}
+	])
+	return template('aggregationPipeline.tpl', result = r, claves= ["_id","avg"], nombres = ["Pais", "Numero"])
+
+    
     
     
 @get('/total_country')
