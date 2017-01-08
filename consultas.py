@@ -87,7 +87,7 @@ def agg5():
 		{"$match" : {"_id":{"$eq": pais}}}
 
 	])
-	return template('aggregationPipeline.tpl', result = r, claves= ["_id","num"], nombres = ["Pais", "Total euros gastados"], num = 10)
+	return template('aggregationPipeline.tpl', result = r, claves= ["_id","num"], nombres = ["Pais", "Total euros gastados"], num = numResuts(r))
     
         
 if __name__ == "__main__":
