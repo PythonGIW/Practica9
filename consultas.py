@@ -74,7 +74,15 @@ def agg4():
 @get('/total_country')
 # http://localhost:8080/total_country?c=Alemania
 def agg5():
-    pass
+	pais = request.query['c']
+	r = db.usuarios.aggregate([
+		{"$lookup": {"from": "pedidos", "localField": "_id", "foreignField": "cliente", "as": "pedidos" }},
+		{"$unwind":"$pedidos"},
+		{"$group": {"_id": "$pais","num": {"$sum":"$pedidos.total"}}},
+		{"$match" : {"_id":{"$eq": pais}}}
+
+	])
+	return template('aggregationPipeline.tpl', result = r, claves= ["_id","num"], nombres = ["Pais", "Total euros gastados"], num = 10)
     
         
 if __name__ == "__main__":
