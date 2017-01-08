@@ -27,7 +27,7 @@ db = mongoclient['giw']
 @get('/top_countries')
 # http://localhost:8080/top_countries?n=3
 def agg1():
-	result = db.usuarios.aggregate( [
+	result = db.usuarios.aggregate([
 		{"$group": {"_id": "$pais","num": {"$sum":1}}},
  		{"$sort" : {"num":-1, "_id":-1}},
  		{"$limit" : int(request.query['n'])}
@@ -52,20 +52,25 @@ def agg2():
 @get('/age_range')
 # http://localhost:8080/age_range?min=80
 def agg3():
-    r = db.usuarios.aggregate( [
+    r = db.usuarios.aggregate([
 		{"$group": {"_id": "$pais","num": {"$sum":1}, "max":{"$max":"$edad"}, "min":{"$min":"$edad"}}},
 		{"$project": {"range":{"$subtract":["$max", "$min"]}, "pais": "$_id", "max":"$max", "min":"$min"}},
 		{"$match" : {"range":{"$gte":int(request.query['min'])}}},
 		{"$sort" : {"range":-1, "_id":-1}}
 	])
-		return template('aggregationPipeline.tpl', result = r, claves= ["_id","range"], nombres = ["Pais", "Rango de Edades"])
+		#return template('aggregationPipeline.tpl', result = r, claves= ["_id","range"], nombres = ["Pais", "Rango de Edades"])
 
     
     
 @get('/avg_lines')
 # http://localhost:8080/avg_lines
 def agg4():
-    pass
+	 r = db.usuarios.aggregate([
+		{"$group": {"_id": "$pais","num": {"$sum":1}, "avg":{"$avg":"$lineas"}}}
+	])
+	 	return template('aggregationPipeline.tpl', result = r, claves= ["_id","avg"], nombres = ["Pais", "Numero"])
+
+    
     
     
 @get('/total_country')
