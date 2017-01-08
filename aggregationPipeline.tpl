@@ -30,7 +30,6 @@
             %end
             </tr>
           %for r in result:
-          {{r}}
             <tr>
             %for c in claves:
               <td>{{r[c]}}</td>
