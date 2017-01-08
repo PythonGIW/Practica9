@@ -23,7 +23,11 @@ from pymongo import MongoClient
 mongoclient = MongoClient()
 db = mongoclient['giw']
 
-
+def numResuts(res):
+	i = 0;
+	for r in res:
+		i += 1
+	return i;
 @get('/top_countries')
 # http://localhost:8080/top_countries?n=3
 def agg1():
@@ -46,6 +50,7 @@ def agg2():
 			{"$group": {"_id": { "nombre": "$lineas.nombre", "precio": "$lineas.precio"},"num": {"$sum":"$lineas.cantidad"}}}
 			#
 		])
+	print result2.count()
 	return template('aggregationPipelineProductos.tpl', result = result2, nombres = ["Nombre", "Numero", "Precio"], num = 10)
 
     
@@ -66,7 +71,7 @@ def agg4():
 	r = db.usuarios.aggregate([
 		{"$group": {"_id": "$pais","num": {"$sum":1}, "avg":{"$avg":"$lineas"}}}
 	])
-	return template('aggregationPipeline.tpl', result = r, claves= ["_id","avg"], nombres = ["Pais", "Numero"])
+	return template('aggregationPipeline.tpl', result = r, claves= ["_id","avg"], nombres = ["Pais", "Numero"], num = 10)
 
     
     
