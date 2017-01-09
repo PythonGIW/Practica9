@@ -50,8 +50,8 @@ def agg2():
 			{"$group": {"_id": { "nombre": "$lineas.nombre", "precio": "$lineas.precio"},"num": {"$sum":"$lineas.cantidad"}}}
 			#
 		])
-	print result2.count()
-	return template('aggregationPipelineProductos.tpl', result = result2, nombres = ["Nombre", "Numero", "Precio"], num = 10)
+	num = numResuts(result2)
+	return template('aggregationPipelineProductos.tpl', result = result2, nombres = ["Nombre", "Numero", "Precio"], num = num)
 
     
 @get('/age_range')
@@ -63,7 +63,8 @@ def agg3():
 			{"$match" : {"range":{"$gte":int(request.query['min'])}}},
 			{"$sort" : {"range":-1, "_id":-1}}
 		])
-    return template('aggregationPipeline.tpl', result = r, claves= ["_id","range"], nombres = ["Pais", "Numero"], num = 10)
+    num = numResuts(r)
+    return template('aggregationPipeline.tpl', result = r, claves= ["_id","range"], nombres = ["Pais", "Numero"], num = num)
     
 @get('/avg_lines')
 # http://localhost:8080/avg_lines
